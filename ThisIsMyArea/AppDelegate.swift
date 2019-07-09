@@ -37,8 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate,ReachabilityObserverDelega
         locationManager.requestAlwaysAuthorization()
         addReachabilityObserver()
         
-        //setup config first
-        ConfigManager.shared.setup(isWalking: false)
+       
+        ConfigManager.shared.setup(isWalking: true)
         return true
     }
     

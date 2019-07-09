@@ -36,7 +36,7 @@ class GeofenceViewModel{
     static func getGeofences(userCoor:CLLocationCoordinate2D,onComplete:@escaping (([Geofence])->Void)){
         guard let radius = ConfigManager.shared.regionRadius else { return onComplete([Geofence]()) }
         
-        let geofences = getTestData(radius:radius)
+        let geofences = getTestData(userCoor:userCoor,radius:radius)
         
         //run in background thread for better performance
         DispatchQueue.global().async {
@@ -55,13 +55,28 @@ class GeofenceViewModel{
         }
     }
     
-    static private func getTestData(radius:Double)->[Geofence]{
+    static private func getTestData(userCoor:CLLocationCoordinate2D,radius:Double)->[Geofence]{
         
         var geofences: [Geofence] = []
+        //for is walking, actually is testing
+        //code below will populate nearby 5 nearest geofence with distance from user point of 10 meter
+        if ConfigManager.shared.isWalking{
+            let maxCount = ConfigManager.shared.maxMonitoringCount
+            for i in 0..<maxCount{
+                let range = 10 * 0.00001 //10 meteer
+                let rad = Double(i) * 360/Double(maxCount) * .pi / 180
+                let x = cos(rad)*range+userCoor.latitude
+                let y = sin(rad)*range+userCoor.longitude
+                let newCoor = CLLocationCoordinate2D(latitude: x, longitude: y)
+                geofences.append(Geofence(id: "\(i)", coordinate: newCoor, radius: radius, title:"Walking Point \(i)"))
+            }
+        }else{
+            geofences.append(Geofence(id: "1", coordinate: CLLocationCoordinate2D(latitude: 3.122224, longitude: 101.674965), radius: radius, title:"Petronas Bangsar"))
+            geofences.append(Geofence(id: "2", coordinate: CLLocationCoordinate2D(latitude: 3.117811, longitude: 101.677471), radius: radius, title:"Mid Valley Point A"))
+            geofences.append(Geofence(id: "3", coordinate: CLLocationCoordinate2D(latitude: 3.11743470880481, longitude: 101.67611098392119), radius: radius, title:"Mid Valley Office",bssid:"9c:d6:43:2d:3c:48"))
+        }
         
-        geofences.append(Geofence(id: "1", coordinate: CLLocationCoordinate2D(latitude: 3.122224, longitude: 101.674965), radius: radius, title:"Petronas Bangsar"))
-        geofences.append(Geofence(id: "2", coordinate: CLLocationCoordinate2D(latitude: 3.117811, longitude: 101.677471), radius: radius, title:"Mid Valley Point A"))
-        geofences.append(Geofence(id: "3", coordinate: CLLocationCoordinate2D(latitude: 3.11743470880481, longitude: 101.67611098392119), radius: radius, title:"Mid Valley Office",bssid:"9c:d6:43:2d:3c:48"))
+   
         
         return geofences
     }

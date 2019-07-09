@@ -10,10 +10,10 @@ import Foundation
 class ConfigManager {
     static let shared = ConfigManager()
     //Note: all distance measured in meters
-    var isWalking:Bool!
+    var isWalking:Bool!// isWalking meaning Demo
     var regionRadius:Double!
     var nearestRadius:Double!
-    var maxMonitoringCount:Int = 5
+    var maxMonitoringCount:Int = 6
     
     
     init() {

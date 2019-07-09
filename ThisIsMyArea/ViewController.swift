@@ -202,7 +202,7 @@ extension ViewController: CLLocationManagerDelegate {
                  * Only applicatable for first time
                  */
               
-                if !self.isReceiveFirstLocationUpdate{
+                if !self.isReceiveFirstLocationUpdate || ConfigManager.shared.isWalking{
                     self.isReceiveFirstLocationUpdate = true
                     self.updateWhenReceiveFirstLocationUpdate(coordinate: coordinate)
                 }
