@@ -14,12 +14,15 @@ class Geofence{
     var coordinate: CLLocationCoordinate2D
     var radius: CLLocationDistance
     var title:String
+    var bssid:String?
 
-    init(id: String,coordinate: CLLocationCoordinate2D, radius: CLLocationDistance,title:String){
+    //BSSID is nullable
+    init(id: String,coordinate: CLLocationCoordinate2D, radius: CLLocationDistance,title:String,bssid:String? = nil){
         self.id = id
         self.coordinate = coordinate
         self.radius = radius
         self.title = title
+        self.bssid = bssid
     }
 
 }

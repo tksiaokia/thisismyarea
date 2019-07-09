@@ -9,13 +9,18 @@
 import UIKit
 import CoreLocation
 import MapKit
+import Reachability
 
 class ViewController: UIViewController {
+    
+    
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var lblInfo: UILabel!
     
-    var geofences: [GeofenceViewModel] = []
+    
     var locationManager = CLLocationManager()
+    var isReceiveFirstLocationUpdate:Bool = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,15 +28,31 @@ class ViewController: UIViewController {
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
         mapView.delegate = self
-       
+        NotificationCenter.default.addObserver(self, selector: #selector(connectedWifiChanges(_:)), name: .connectedWifiChanges, object: nil)
+        
+        
     }
+    @objc func connectedWifiChanges(_ notification:Notification){
+        updateGeofenceStatus()
+    }
+    func updateGeofenceStatus(){
+        //Connected Wifi is highest priority
+        if let gfvm = GeofenceViewModel.connectedWifiGFVM{
+            updateInfoMessage(msg: "Enter Wifi: "+gfvm.geofence.title)
+        }else if let gfvm = GeofenceViewModel.enteredGeofence{
+            updateInfoMessage(msg: "Enter : "+gfvm.geofence.title)
+        }else{
+            updateInfoMessage(msg: "No enter any fence")
+        }
+    }
+    
     func addTestGeofences(){
         GeofenceViewModel.initTestGeofence().forEach { add($0) }
     }
     
     func add(_ geofence: Geofence) {
         let viewModel = GeofenceViewModel(geofence: geofence)
-        geofences.append(viewModel)
+        GeofenceViewModel.monitoringGeoFences.append(viewModel)
         mapView.addAnnotation(viewModel.mapAnnotation)
         addRadiusOverlay(for: viewModel)
         startMonitoring(for: viewModel)
@@ -57,8 +78,9 @@ class ViewController: UIViewController {
             showAlert(withTitle:"Warning", message: message)
         }
         
-        
+        //Start Monitoring
         locationManager.startMonitoring(for: geofence.region)
+        
     }
     
     func updateInfoMessage(msg:String){
@@ -71,7 +93,6 @@ extension ViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         mapView.showsUserLocation = status == .authorizedAlways
-        
         if CLLocationManager.authorizationStatus() == .authorizedAlways || CLLocationManager.authorizationStatus() == .authorizedWhenInUse   {
             addTestGeofences()
         }
@@ -84,10 +105,12 @@ extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location Manager failed with the following error: \(error)")
     }
+    
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if region is CLCircularRegion {
-            if let viewModel = GeofenceViewModel.getGeofenceViewModel(by: region.identifier, from: geofences){
-                updateInfoMessage(msg: "Enter : "+viewModel.geofence.title)
+            if let viewModel = GeofenceViewModel.getGeofenceViewModel(byID: region.identifier, from: GeofenceViewModel.monitoringGeoFences){
+                GeofenceViewModel.enteredGeofence = viewModel
+                updateGeofenceStatus()
             }
             //  handleEvent(for: region)
         }
@@ -95,13 +118,40 @@ extension ViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         if region is CLCircularRegion {
-            if let viewModel = GeofenceViewModel.getGeofenceViewModel(by: region.identifier, from: geofences){
+            if let viewModel = GeofenceViewModel.getGeofenceViewModel(byID: region.identifier, from: GeofenceViewModel.monitoringGeoFences){
+                
+                //if entered last time, then set to nil
+                if let enteredGeofence = GeofenceViewModel.enteredGeofence,  enteredGeofence.geofence.id == viewModel.geofence.id{
+                    GeofenceViewModel.enteredGeofence = nil
+                }
                 updateInfoMessage(msg: "Exit : "+viewModel.geofence.title)
             }
         }
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        mapView.zoomToUserLocation()
+        
+        if !isReceiveFirstLocationUpdate{
+            isReceiveFirstLocationUpdate = true
+            
+            /*In Case
+             If current position in ady inside region,
+             update it because didEnter of monitoring wont trigger
+             */
+            if let coordinate = locations.last?.coordinate{
+                for geofence in GeofenceViewModel.monitoringGeoFences{
+                    if geofence.region.contains(coordinate){
+                        GeofenceViewModel.enteredGeofence = geofence
+                        updateGeofenceStatus()
+                        break
+                    }
+                }
+            }
+            
+            //zoom to current location
+            mapView.zoomToUserLocation()
+        }
+        
+     
     }
 }
 

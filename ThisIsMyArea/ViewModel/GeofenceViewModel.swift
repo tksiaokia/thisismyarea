@@ -9,6 +9,10 @@
 import Foundation
 import MapKit
 class GeofenceViewModel{
+    static var connectedWifiGFVM:GeofenceViewModel?
+    static var enteredGeofence:GeofenceViewModel?
+    static var monitoringGeoFences:[GeofenceViewModel] = []
+    
     var geofence:Geofence
     init(geofence:Geofence) {
         self.geofence = geofence
@@ -31,12 +35,19 @@ class GeofenceViewModel{
         var geofences: [Geofence] = []
         geofences.append(Geofence(id: "1", coordinate: CLLocationCoordinate2D(latitude: 3.122224, longitude: 101.674965), radius: 50, title:"Petronas Bangsar"))
         geofences.append(Geofence(id: "2", coordinate: CLLocationCoordinate2D(latitude: 3.117811, longitude: 101.677471), radius: 50, title:"Mid Valley"))
+         geofences.append(Geofence(id: "3", coordinate: CLLocationCoordinate2D(latitude: 3.11743470880481, longitude: 101.67611098392119), radius: 50, title:"Mid Valley Office",bssid:"9c:d6:43:2d:3c:48"))
         return geofences
     }
     
-    static func getGeofenceViewModel(by id:String,from list:[GeofenceViewModel])->GeofenceViewModel?{
+    static func getGeofenceViewModel(byID id:String,from list:[GeofenceViewModel])->GeofenceViewModel?{
         guard let matched = list.filter({
             $0.geofence.id == id
+        }).first else { return nil }
+        return matched
+    }
+    static func getGeofenceViewModel(bySSID ssid:String,from list:[GeofenceViewModel])->GeofenceViewModel?{
+        guard let matched = list.filter({
+            $0.geofence.bssid == ssid
         }).first else { return nil }
         return matched
     }
