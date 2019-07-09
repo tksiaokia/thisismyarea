@@ -36,6 +36,7 @@ class GeofenceViewModel{
     static func getGeofences(userCoor:CLLocationCoordinate2D,onComplete:@escaping (([Geofence])->Void)){
         guard let radius = ConfigManager.shared.regionRadius else { return onComplete([Geofence]()) }
         
+        
         let geofences = getTestData(userCoor:userCoor,radius:radius)
         
         //run in background thread for better performance
@@ -55,8 +56,13 @@ class GeofenceViewModel{
         }
     }
     
+    static var _testGeofences: [Geofence]?
     static private func getTestData(userCoor:CLLocationCoordinate2D,radius:Double)->[Geofence]{
+        if let geofences = _testGeofences{
+            return geofences
+        }
         
+        //if nil init
         var geofences: [Geofence] = []
         //for is walking, actually is testing
         //code below will populate nearby 5 nearest geofence with distance from user point of 10 meter
@@ -76,7 +82,7 @@ class GeofenceViewModel{
             geofences.append(Geofence(id: "3", coordinate: CLLocationCoordinate2D(latitude: 3.11743470880481, longitude: 101.67611098392119), radius: radius, title:"Mid Valley Office",bssid:"9c:d6:43:2d:3c:48"))
         }
         
-   
+        _testGeofences = geofences
         
         return geofences
     }
