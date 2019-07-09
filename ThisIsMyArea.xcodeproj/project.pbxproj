@@ -10,6 +10,8 @@
 		B5D6641D2528E3145D134F30 /* Pods_ThisIsMyArea.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E2EB0E0466B661E5F9A5218 /* Pods_ThisIsMyArea.framework */; };
 		E211F6F422D43773005710AB /* ReachabilityObserverDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F6F322D43773005710AB /* ReachabilityObserverDelegate.swift */; };
 		E211F6F622D43A7F005710AB /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F6F522D43A7F005710AB /* NotificationName+Extension.swift */; };
+		E211F6F822D44AF7005710AB /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F6F722D44AF7005710AB /* ConfigManager.swift */; };
+		E211F6FA22D456CE005710AB /* CLLocationCoordinate2D+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F6F922D456CE005710AB /* CLLocationCoordinate2D+Extension.swift */; };
 		E21B1A5122D326DD00E0AB17 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21B1A5022D326DD00E0AB17 /* AppDelegate.swift */; };
 		E21B1A5322D326DD00E0AB17 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21B1A5222D326DD00E0AB17 /* ViewController.swift */; };
 		E21B1A5622D326DD00E0AB17 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E21B1A5422D326DD00E0AB17 /* Main.storyboard */; };
@@ -31,6 +33,8 @@
 		E211F6EF22D396AD005710AB /* ThisIsMyArea.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ThisIsMyArea.entitlements; sourceTree = "<group>"; };
 		E211F6F322D43773005710AB /* ReachabilityObserverDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityObserverDelegate.swift; sourceTree = "<group>"; };
 		E211F6F522D43A7F005710AB /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
+		E211F6F722D44AF7005710AB /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
+		E211F6F922D456CE005710AB /* CLLocationCoordinate2D+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extension.swift"; sourceTree = "<group>"; };
 		E21B1A4D22D326DD00E0AB17 /* ThisIsMyArea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThisIsMyArea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21B1A5022D326DD00E0AB17 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E21B1A5222D326DD00E0AB17 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +132,7 @@
 				E21B1A6622D3311000E0AB17 /* MKMapView+Extension.swift */,
 				E21B1A7322D343BB00E0AB17 /* ViewController+Extension.swift */,
 				E211F6F522D43A7F005710AB /* NotificationName+Extension.swift */,
+				E211F6F922D456CE005710AB /* CLLocationCoordinate2D+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				E21B1A7622D375A800E0AB17 /* Utility.swift */,
+				E211F6F722D44AF7005710AB /* ConfigManager.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -287,9 +293,11 @@
 			files = (
 				E21B1A6D22D336E500E0AB17 /* GeofenceViewModel.swift in Sources */,
 				E21B1A6F22D337F200E0AB17 /* GeofenceMKAnnotation.swift in Sources */,
+				E211F6FA22D456CE005710AB /* CLLocationCoordinate2D+Extension.swift in Sources */,
 				E211F6F622D43A7F005710AB /* NotificationName+Extension.swift in Sources */,
 				E21B1A7722D375A800E0AB17 /* Utility.swift in Sources */,
 				E211F6F422D43773005710AB /* ReachabilityObserverDelegate.swift in Sources */,
+				E211F6F822D44AF7005710AB /* ConfigManager.swift in Sources */,
 				E21B1A5322D326DD00E0AB17 /* ViewController.swift in Sources */,
 				E21B1A6722D3311000E0AB17 /* MKMapView+Extension.swift in Sources */,
 				E21B1A6A22D3343400E0AB17 /* Geofence.swift in Sources */,

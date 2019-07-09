@@ -31,13 +31,51 @@ class GeofenceViewModel{
         return region
     }
     
-    static func initTestGeofence()->[Geofence]{
+    //Assuming this funtion may have http request to fetch data
+    //Or it need more processing in background first
+    static func getGeofences(userCoor:CLLocationCoordinate2D,onComplete:@escaping (([Geofence])->Void)){
+        guard let radius = ConfigManager.shared.regionRadius else { return onComplete([Geofence]()) }
+        
+        let geofences = getTestData(radius:radius)
+        
+        //run in background thread for better performance
+        DispatchQueue.global().async {
+            let sorted = calculateDistanceAndSort(list: geofences, userCoor: userCoor)
+            
+            //then return in main thread
+            DispatchQueue.main.async {
+                // filter only nearby location
+                let filtered = sorted.filter{
+                    $0.distanceFromUserCoor < ConfigManager.shared.nearestRadius
+                }
+                //only select up to max count
+                onComplete(Array(filtered.prefix(ConfigManager.shared.maxMonitoringCount)))
+            }
+            
+        }
+    }
+    
+    static private func getTestData(radius:Double)->[Geofence]{
+        
         var geofences: [Geofence] = []
-        geofences.append(Geofence(id: "1", coordinate: CLLocationCoordinate2D(latitude: 3.122224, longitude: 101.674965), radius: 50, title:"Petronas Bangsar"))
-        geofences.append(Geofence(id: "2", coordinate: CLLocationCoordinate2D(latitude: 3.117811, longitude: 101.677471), radius: 50, title:"Mid Valley"))
-         geofences.append(Geofence(id: "3", coordinate: CLLocationCoordinate2D(latitude: 3.11743470880481, longitude: 101.67611098392119), radius: 50, title:"Mid Valley Office",bssid:"9c:d6:43:2d:3c:48"))
+        
+        geofences.append(Geofence(id: "1", coordinate: CLLocationCoordinate2D(latitude: 3.122224, longitude: 101.674965), radius: radius, title:"Petronas Bangsar"))
+        geofences.append(Geofence(id: "2", coordinate: CLLocationCoordinate2D(latitude: 3.117811, longitude: 101.677471), radius: radius, title:"Mid Valley Point A"))
+        geofences.append(Geofence(id: "3", coordinate: CLLocationCoordinate2D(latitude: 3.11743470880481, longitude: 101.67611098392119), radius: radius, title:"Mid Valley Office",bssid:"9c:d6:43:2d:3c:48"))
+        
         return geofences
     }
+    
+    static private func calculateDistanceAndSort(list:[Geofence],userCoor:CLLocationCoordinate2D)->[Geofence]{
+        for fence in list{
+            fence.distanceFromUserCoor = fence.coordinate.distance(from: userCoor)
+        }
+        //then sort them before return
+        return list.sorted { (a, b) -> Bool in
+            a.distanceFromUserCoor < b.distanceFromUserCoor
+        }
+    }
+    
     
     static func getGeofenceViewModel(byID id:String,from list:[GeofenceViewModel])->GeofenceViewModel?{
         guard let matched = list.filter({

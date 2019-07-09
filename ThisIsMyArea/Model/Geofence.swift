@@ -15,6 +15,9 @@ class Geofence{
     var radius: CLLocationDistance
     var title:String
     var bssid:String?
+    
+    //run time value
+    var distanceFromUserCoor:Double = -1
 
     //BSSID is nullable
     init(id: String,coordinate: CLLocationCoordinate2D, radius: CLLocationDistance,title:String,bssid:String? = nil){

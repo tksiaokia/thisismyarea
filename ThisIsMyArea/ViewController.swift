@@ -27,6 +27,7 @@ class ViewController: UIViewController {
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
+        
         mapView.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(connectedWifiChanges(_:)), name: .connectedWifiChanges, object: nil)
         
@@ -46,9 +47,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func addTestGeofences(){
-        GeofenceViewModel.initTestGeofence().forEach { add($0) }
-    }
+    
     
     func add(_ geofence: Geofence) {
         let viewModel = GeofenceViewModel(geofence: geofence)
@@ -57,6 +56,17 @@ class ViewController: UIViewController {
         addRadiusOverlay(for: viewModel)
         startMonitoring(for: viewModel)
     }
+    func remove(_ viewModel: GeofenceViewModel){
+        if let index = GeofenceViewModel.monitoringGeoFences.firstIndex(where: { (vm) -> Bool in
+            vm.geofence.id == viewModel.geofence.id
+        }){
+            GeofenceViewModel.monitoringGeoFences.remove(at: index)
+        }
+        mapView.removeAnnotation(viewModel.mapAnnotation)
+        removeRadiusOverlay(for: viewModel)
+        stopMonitoring(for: viewModel)
+        
+    }
     
     // MARK: Other mapview functions
     @IBAction func zoomToCurrentLocation(_ sender: Any) {
@@ -64,6 +74,9 @@ class ViewController: UIViewController {
     }
     func addRadiusOverlay(for geofence: GeofenceViewModel) {
         mapView?.addOverlay(geofence.mapCircle)
+    }
+    func removeRadiusOverlay(for geofence: GeofenceViewModel) {
+        mapView?.removeOverlay(geofence.mapCircle)
     }
     func startMonitoring(for geofence: GeofenceViewModel) {
         if !CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) {
@@ -82,9 +95,27 @@ class ViewController: UIViewController {
         locationManager.startMonitoring(for: geofence.region)
         
     }
+    func stopMonitoring(for geofence: GeofenceViewModel){
+        locationManager.stopMonitoring(for: geofence.region)
+    }
     
     func updateInfoMessage(msg:String){
         lblInfo.text = msg
+    }
+    
+    func updateWhenReceiveFirstLocationUpdate(coordinate:CLLocationCoordinate2D){
+        
+        for geofence in GeofenceViewModel.monitoringGeoFences{
+            if geofence.region.contains(coordinate){
+                GeofenceViewModel.enteredGeofence = geofence
+                updateGeofenceStatus()
+                break
+            }
+        }
+        //zoom to current location
+        mapView.zoomToUserLocation(coordinate: coordinate)
+        
+        
     }
     
 }
@@ -93,9 +124,7 @@ extension ViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         mapView.showsUserLocation = status == .authorizedAlways
-        if CLLocationManager.authorizationStatus() == .authorizedAlways || CLLocationManager.authorizationStatus() == .authorizedWhenInUse   {
-            addTestGeofences()
-        }
+        
     }
     
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
@@ -112,7 +141,6 @@ extension ViewController: CLLocationManagerDelegate {
                 GeofenceViewModel.enteredGeofence = viewModel
                 updateGeofenceStatus()
             }
-            //  handleEvent(for: region)
         }
     }
     
@@ -129,29 +157,60 @@ extension ViewController: CLLocationManagerDelegate {
         }
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        if !isReceiveFirstLocationUpdate{
-            isReceiveFirstLocationUpdate = true
-            
-            /*In Case
-             If current position in ady inside region,
-             update it because didEnter of monitoring wont trigger
-             */
-            if let coordinate = locations.last?.coordinate{
-                for geofence in GeofenceViewModel.monitoringGeoFences{
-                    if geofence.region.contains(coordinate){
-                        GeofenceViewModel.enteredGeofence = geofence
-                        updateGeofenceStatus()
-                        break
-                    }
-                }
-            }
-            
-            //zoom to current location
-            mapView.zoomToUserLocation()
+        if CLLocationManager.authorizationStatus() != .authorizedAlways && CLLocationManager.authorizationStatus() != .authorizedWhenInUse{
+            return
         }
         
-     
+        if let coordinate = locations.last?.coordinate{
+            
+            
+            //every time location update, find nearest geofence and re-monitor
+            GeofenceViewModel.getGeofences(userCoor: coordinate) { (fences) in
+                var listToRemote = [GeofenceViewModel]()
+                var listToAdd = [Geofence]()
+                
+                //for new set, check existing monitoring ady have or not, then add it
+                for newFence in fences{
+                    //if not found, then add to listToAdd
+                    if GeofenceViewModel.monitoringGeoFences.filter({ (old) -> Bool in
+                        old.geofence.id == newFence.id
+                    }).count == 0{
+                        listToAdd.append(newFence)
+                    }
+                }
+                //for old set, check if new set still consist of it, else remove it
+                for oldFence in GeofenceViewModel.monitoringGeoFences{
+                    if fences.filter({ (new) -> Bool in
+                        new.id == oldFence.geofence.id
+                    }).count == 0{
+                        listToRemote.append(oldFence)
+                    }
+                }
+                
+                //now remove first
+                listToRemote.forEach{ self.remove($0) }
+             
+                
+                //then add again
+                listToAdd.forEach{ self.add($0) }
+                
+                
+                /*
+                 * In Case
+                 * If current position in ady inside region,
+                 * update it because didEnter of monitoring wont trigger
+                 * Only applicatable for first time
+                 */
+              
+                if !self.isReceiveFirstLocationUpdate{
+                    self.isReceiveFirstLocationUpdate = true
+                    self.updateWhenReceiveFirstLocationUpdate(coordinate: coordinate)
+                }
+                
+            }
+            
+            
+        }
     }
 }
 

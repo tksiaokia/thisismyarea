@@ -9,9 +9,16 @@
 import Foundation
 import MapKit
 extension MKMapView {
-    func zoomToUserLocation() {
-        guard let coordinate = userLocation.location?.coordinate else { return }
-        let region = MKCoordinateRegion(center:coordinate, latitudinalMeters: 200, longitudinalMeters: 200)
+    func zoomToUserLocation(coordinate:CLLocationCoordinate2D? = nil) {
+        var userCoordinate:CLLocationCoordinate2D?
+        if coordinate != nil{
+            userCoordinate = coordinate
+        }else{
+            userCoordinate = userLocation.location?.coordinate
+        }
+        guard let coor = userCoordinate else { return }
+        let meter = ConfigManager.shared.regionRadius * 2
+        let region = MKCoordinateRegion(center:coor, latitudinalMeters: meter, longitudinalMeters: meter)
         setRegion(region, animated: true)
     }
     
