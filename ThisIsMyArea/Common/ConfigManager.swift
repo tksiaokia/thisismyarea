@@ -11,9 +11,9 @@ class ConfigManager {
     static let shared = ConfigManager()
     //Note: all distance measured in meters
     var isWalking:Bool!// isWalking meaning Demo
-    var regionRadius:Double!
-    var nearestRadius:Double!
-    var maxMonitoringCount:Int = 6
+    var regionRadius:Double! // Region Radius of Geofence
+    var nearestRadius:Double! // Distance to find nearest geofence from user location
+    var maxMonitoringCount:Int = 6 // The count of how many region in monitoring, max 20 in ios Applicaition
     
     
     init() {
