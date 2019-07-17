@@ -12,6 +12,12 @@
 		E211F6F622D43A7F005710AB /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F6F522D43A7F005710AB /* NotificationName+Extension.swift */; };
 		E211F6F822D44AF7005710AB /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F6F722D44AF7005710AB /* ConfigManager.swift */; };
 		E211F6FA22D456CE005710AB /* CLLocationCoordinate2D+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F6F922D456CE005710AB /* CLLocationCoordinate2D+Extension.swift */; };
+		E211F70622D845EB005710AB /* GeofenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F70522D845EB005710AB /* GeofenceCell.swift */; };
+		E211F70822D84682005710AB /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F70722D84682005710AB /* ListViewController.swift */; };
+		E211F70A22DDB6C2005710AB /* GithubEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F70922DDB6C2005710AB /* GithubEndpoint.swift */; };
+		E211F70C22DDB85C005710AB /* IssueTrackerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F70B22DDB85C005710AB /* IssueTrackerModel.swift */; };
+		E211F70E22DDB89B005710AB /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F70D22DDB89B005710AB /* Issue.swift */; };
+		E211F71022DDB8AD005710AB /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E211F70F22DDB8AD005710AB /* Repository.swift */; };
 		E21B1A5122D326DD00E0AB17 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21B1A5022D326DD00E0AB17 /* AppDelegate.swift */; };
 		E21B1A5322D326DD00E0AB17 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21B1A5222D326DD00E0AB17 /* ViewController.swift */; };
 		E21B1A5622D326DD00E0AB17 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E21B1A5422D326DD00E0AB17 /* Main.storyboard */; };
@@ -35,6 +41,12 @@
 		E211F6F522D43A7F005710AB /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		E211F6F722D44AF7005710AB /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		E211F6F922D456CE005710AB /* CLLocationCoordinate2D+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extension.swift"; sourceTree = "<group>"; };
+		E211F70522D845EB005710AB /* GeofenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceCell.swift; sourceTree = "<group>"; };
+		E211F70722D84682005710AB /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		E211F70922DDB6C2005710AB /* GithubEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubEndpoint.swift; sourceTree = "<group>"; };
+		E211F70B22DDB85C005710AB /* IssueTrackerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTrackerModel.swift; sourceTree = "<group>"; };
+		E211F70D22DDB89B005710AB /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
+		E211F70F22DDB8AD005710AB /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		E21B1A4D22D326DD00E0AB17 /* ThisIsMyArea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThisIsMyArea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21B1A5022D326DD00E0AB17 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E21B1A5222D326DD00E0AB17 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +100,14 @@
 			path = Delegate;
 			sourceTree = "<group>";
 		};
+		E211F70422D845DD005710AB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E211F70522D845EB005710AB /* GeofenceCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E21B1A4422D326DD00E0AB17 = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +129,7 @@
 		E21B1A4F22D326DD00E0AB17 /* ThisIsMyArea */ = {
 			isa = PBXGroup;
 			children = (
+				E211F70422D845DD005710AB /* Views */,
 				E211F6F222D43769005710AB /* Delegate */,
 				E211F6EF22D396AD005710AB /* ThisIsMyArea.entitlements */,
 				E21B1A7522D3759900E0AB17 /* Common */,
@@ -122,6 +143,8 @@
 				E21B1A5C22D326DF00E0AB17 /* LaunchScreen.storyboard */,
 				E21B1A5F22D326DF00E0AB17 /* Info.plist */,
 				E21B1A5722D326DD00E0AB17 /* ThisIsMyArea.xcdatamodeld */,
+				E211F70722D84682005710AB /* ListViewController.swift */,
+				E211F70922DDB6C2005710AB /* GithubEndpoint.swift */,
 			);
 			path = ThisIsMyArea;
 			sourceTree = "<group>";
@@ -142,6 +165,8 @@
 			children = (
 				E21B1A6922D3343400E0AB17 /* Geofence.swift */,
 				E21B1A6E22D337F200E0AB17 /* GeofenceMKAnnotation.swift */,
+				E211F70D22DDB89B005710AB /* Issue.swift */,
+				E211F70F22DDB8AD005710AB /* Repository.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -150,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				E21B1A6C22D336E500E0AB17 /* GeofenceViewModel.swift */,
+				E211F70B22DDB85C005710AB /* IssueTrackerModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -271,13 +297,29 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ThisIsMyArea/Pods-ThisIsMyArea-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ModelMapper/Mapper.framework",
+				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
+				"${BUILT_PRODUCTS_DIR}/Moya-ModelMapper/Moya_ModelMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxOptional/RxOptional.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya_ModelMapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxOptional.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -293,17 +335,23 @@
 			files = (
 				E21B1A6D22D336E500E0AB17 /* GeofenceViewModel.swift in Sources */,
 				E21B1A6F22D337F200E0AB17 /* GeofenceMKAnnotation.swift in Sources */,
+				E211F70C22DDB85C005710AB /* IssueTrackerModel.swift in Sources */,
 				E211F6FA22D456CE005710AB /* CLLocationCoordinate2D+Extension.swift in Sources */,
+				E211F70A22DDB6C2005710AB /* GithubEndpoint.swift in Sources */,
 				E211F6F622D43A7F005710AB /* NotificationName+Extension.swift in Sources */,
 				E21B1A7722D375A800E0AB17 /* Utility.swift in Sources */,
+				E211F70622D845EB005710AB /* GeofenceCell.swift in Sources */,
 				E211F6F422D43773005710AB /* ReachabilityObserverDelegate.swift in Sources */,
 				E211F6F822D44AF7005710AB /* ConfigManager.swift in Sources */,
+				E211F70822D84682005710AB /* ListViewController.swift in Sources */,
+				E211F71022DDB8AD005710AB /* Repository.swift in Sources */,
 				E21B1A5322D326DD00E0AB17 /* ViewController.swift in Sources */,
 				E21B1A6722D3311000E0AB17 /* MKMapView+Extension.swift in Sources */,
 				E21B1A6A22D3343400E0AB17 /* Geofence.swift in Sources */,
 				E21B1A7422D343BB00E0AB17 /* ViewController+Extension.swift in Sources */,
 				E21B1A5922D326DD00E0AB17 /* ThisIsMyArea.xcdatamodeld in Sources */,
 				E21B1A5122D326DD00E0AB17 /* AppDelegate.swift in Sources */,
+				E211F70E22DDB89B005710AB /* Issue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

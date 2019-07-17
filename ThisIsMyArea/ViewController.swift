@@ -10,20 +10,38 @@ import UIKit
 import CoreLocation
 import MapKit
 import Reachability
-
+import RxSwift
 class ViewController: UIViewController {
     
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var lblInfo: UILabel!
     
+    @IBOutlet weak var txtf: UITextField!
+    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var pickerView: UIPickerView!
     
     var locationManager = CLLocationManager()
     var isReceiveFirstLocationUpdate:Bool = false
-    
+    let bag =  DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        txtf.rx.text.orEmpty.map { $0.count > 5
+            }.bind(to: button.rx.isUserInteractionEnabled).disposed(by: bag)
+        
+        button.rx.tap.subscribe(onNext:{
+            print("Click Tap")
+        }).disposed(by:bag)
+        
+        Observable.just([UIColor.red, UIColor.green, UIColor.blue])
+            .bind(to: pickerView.rx.items) { _, item, _ in
+                let view = UIView()
+                view.backgroundColor = item
+                return view
+            }
+            .disposed(by: bag)
+        
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
@@ -52,8 +70,8 @@ class ViewController: UIViewController {
     func add(_ geofence: Geofence) {
         let viewModel = GeofenceViewModel(geofence: geofence)
         GeofenceViewModel.monitoringGeoFences.append(viewModel)
-        mapView.addAnnotation(viewModel.mapAnnotation)
-        addRadiusOverlay(for: viewModel)
+        // mapView.addAnnotation(viewModel.mapAnnotation)
+        // addRadiusOverlay(for: viewModel)
         startMonitoring(for: viewModel)
     }
     func remove(_ viewModel: GeofenceViewModel){
@@ -189,7 +207,7 @@ extension ViewController: CLLocationManagerDelegate {
                 
                 //now remove first
                 listToRemote.forEach{ self.remove($0) }
-             
+                
                 
                 //then add again
                 listToAdd.forEach{ self.add($0) }
@@ -201,7 +219,7 @@ extension ViewController: CLLocationManagerDelegate {
                  * update it because didEnter of monitoring wont trigger
                  * Only applicatable for first time
                  */
-              
+                
                 if !self.isReceiveFirstLocationUpdate || ConfigManager.shared.isWalking{
                     self.isReceiveFirstLocationUpdate = true
                     self.updateWhenReceiveFirstLocationUpdate(coordinate: coordinate)

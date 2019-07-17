@@ -6,5 +6,8 @@ target 'ThisIsMyArea' do
   use_frameworks!
 
   # Pods for ThisIsMyArea
-  pod 'ReachabilitySwift' 
+  pod 'RxCocoa'
+  pod 'ReachabilitySwift'
+  pod 'Moya-ModelMapper/RxSwift'
+  pod 'RxOptional'
 end
